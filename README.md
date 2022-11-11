@@ -31,3 +31,10 @@ live.TrendAnalysis("United States", 3, False)
   - [ ] Test/Verify Sentiment model
   - [x] Stream Tweet trend data
   - [ ] Process search data
+
+-----
+
+**Relevant Documents**
+
+https://developer.twitter.com/en/docs/tutorials/building-high-quality-filters
+https://www.sciencedirect.com/science/article/pii/S0268401218306005
