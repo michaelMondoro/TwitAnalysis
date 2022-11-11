@@ -23,3 +23,22 @@ live.TrendAnalysis("United States", 3, False)
 ```
 
 ![tweets](https://user-images.githubusercontent.com/38412172/197245058-916f99d9-5c0d-437d-80e3-158a8e3af039.png)
+
+
+**TODO**:
+  - [ ] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
+  - [ ] Calculate *Sentiment* (General sentiment surrounding topic/trend)
+  - [ ] Test/Verify Sentiment model
+  - [x] Stream Tweet trend data
+  - [ ] Process search data
+
+-----
+
+**Documentation**
+
+https://developer.twitter.com/en/docs/tutorials/building-high-quality-filters
+
+**Research**
+
+https://www.sciencedirect.com/science/article/pii/S0268401218306005
+https://epjdatascience.springeropen.com/articles/10.1140/epjds/s13688-018-0178-0
