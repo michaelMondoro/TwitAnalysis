@@ -34,8 +34,11 @@ live.TrendAnalysis("United States", 3, False)
 
 -----
 
-**Relevant Documents**
+**Documentation**
 
 https://developer.twitter.com/en/docs/tutorials/building-high-quality-filters
+
+**Research**
+
 https://www.sciencedirect.com/science/article/pii/S0268401218306005
 https://epjdatascience.springeropen.com/articles/10.1140/epjds/s13688-018-0178-0
