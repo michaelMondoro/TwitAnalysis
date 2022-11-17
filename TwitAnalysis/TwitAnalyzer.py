@@ -106,6 +106,18 @@ class TwitAnalyzer:
         blob = TextBlob(self.get_text(tweet))
         return blob.polarity
 
+    # Estimate the number of people reached by this tweet
+    def get_reach(self, tweet):
+        return self.get_followers(tweet)
+
+    # Gets the sum of followers of the tweet's author as well as any users who retweeted
+    def get_followers(self, tweet):
+        followers = tweet.author.followers_count
+        for retweet in tweet.retweets():
+            followers += retweet.author.followers_count
+
+        return followers
+
     # Scrape tweets related to specified topic 
     # NOTE: THIS FILTERS RETWEETS
     def get_topic_data(self, topic, max_tweets):
