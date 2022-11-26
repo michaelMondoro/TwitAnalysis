@@ -121,6 +121,7 @@ class TwitAnalyzer:
 
     # Scrape tweets related to specified topic 
     # NOTE: THIS FILTERS RETWEETS
+    # Returns - List of tweet objects
     def get_topic_data(self, topic, max_tweets):
         results = self.api.search_tweets(q=f"{topic} -filter:retweets", result_type='recent',tweet_mode='extended', count=100)
         data = list(results)
