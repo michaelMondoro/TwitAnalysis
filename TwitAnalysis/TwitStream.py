@@ -17,6 +17,7 @@ class TwitStream(tweepy.Stream):
         self.unique_retweets = []
         self.pos = 0
         self.neg = 0
+        self.impact_raw = 0
 
     def get_perc_retweets(self):
         return round((self.retweets/self.tweets)*100,2)
@@ -29,6 +30,13 @@ class TwitStream(tweepy.Stream):
     def get_unique_retweets(self):
         return len(self.unique_retweets)
 
+    # Gets the sum of followers of the tweet's author as well as any users who retweeted
+    def get_impact_raw(self, tweet):
+        followers = tweet.author.followers_count
+        for retweet in tweet.retweets():
+            followers += retweet.author.followers_count
+
+        self.impact_raw += followers
 
     def print_tweet(self, tweet, text, quoted_text, url, quote_url):
         # Print header for tweet or retweet
@@ -84,7 +92,8 @@ class TwitStream(tweepy.Stream):
         quote_url = ""
 
         self.get_sentiment(status)
-
+        self.get_followers(status)
+        
         # Get text from retweet
         if hasattr(status, 'retweeted_status'):
             retweet_url = self.get_url(status.retweeted_status)
