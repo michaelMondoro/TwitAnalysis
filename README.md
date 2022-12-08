@@ -1,7 +1,7 @@
 [![Generic badge](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/Maintained-yes-green.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/Python-3.10.6-yellow.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/TwitAnalysis-1.0.18-red.svg)](https://test.pypi.org/project/TwitAnalysis/)
+[![Generic badge](https://img.shields.io/badge/TwitAnalysis-1.0.19-red.svg)](https://test.pypi.org/project/TwitAnalysis/)
 
 ## Purpose
 Every individual user on Twitter has a customized, personal experience and only views a tiny portion of the actual conversations, content and opinions that are put out on the platform. The purpose of this project is to provide tools to allow people to use Twitter data to obtain a more holistic perspective of the social network landscape. The TwitAnalysis modules allow for the live processing of Tweet streams as well as processing mass amounts of posted content related to certain topics, trends or users. This allows for analysis of a much larger sample size of Twitter data, allowing us to estimate the impact/reach of Twitter content. Basically, this means that we can go beyond just seeing what our friends are thinking/saying on the platform, and see the opinions of Twitter at large.

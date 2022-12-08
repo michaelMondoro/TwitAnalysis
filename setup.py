@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="TwitAnalysis",
-    version="1.0.18",
+    version="1.0.19",
     author="Michael Mondoro",
     author_email="michaelmondoro@gmail.com",
     description="Package for analyzing Twitter data",
