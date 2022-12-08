@@ -107,8 +107,7 @@ class TwitAnalyzer:
         return blob.polarity
 
     # Estimate the number of people reached by this tweet
-    # TODO: potentially add other variables to determine reach?
-    def get_reach(self, tweet):
+    def get_impact_raw(self, tweet):
         return self.get_followers(tweet)
 
     # Gets the sum of followers of the tweet's author as well as any users who retweeted
@@ -121,6 +120,7 @@ class TwitAnalyzer:
 
     # Scrape tweets related to specified topic 
     # NOTE: THIS FILTERS RETWEETS
+    # Returns - List of tweet objects
     def get_topic_data(self, topic, max_tweets):
         results = self.api.search_tweets(q=f"{topic} -filter:retweets", result_type='recent',tweet_mode='extended', count=100)
         data = list(results)
