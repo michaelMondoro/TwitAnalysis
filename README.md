@@ -26,7 +26,7 @@ live.TrendAnalysis("United States", 3, False)
 
 
 **TODO**:
-  - [ ] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
+  - [x] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
   - [ ] Calculate *Sentiment* (General sentiment surrounding topic/trend)
   - [ ] Test/Verify Sentiment model
   - [x] Stream Tweet trend data
