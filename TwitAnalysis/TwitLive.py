@@ -11,7 +11,7 @@ Module for processing live twitter data
 
 class TwitLive:
 
-    def __init__(self, analyzer=None):
+    def __init__(self, analyzer=None, config_path=None):
         """
         Class used for analyzing live Twitter data
 
@@ -24,7 +24,7 @@ class TwitLive:
 
         """
         if analyzer == None:
-            self.analyzer = TwitAnalyzer()
+            self.analyzer = TwitAnalyzer(config_path=config_path)
         else:
             self.analyzer = analyzer
             

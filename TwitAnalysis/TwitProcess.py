@@ -5,8 +5,8 @@ from . import TwitStream
 Module for processing twitter data offline
 '''
 class TwitProcess:
-    def __init__(self):
-        self.analyzer = TwitAnalyzer()
+    def __init__(self, config_path=None):
+        self.analyzer = TwitAnalyzer(config_path=config_path)
     
 
     # Process bulk twitter data related to specified query
