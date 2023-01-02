@@ -5,12 +5,12 @@ from requests.utils import unquote
 from textblob import TextBlob
 
 '''
-# Class for processing and analyzing Tweets
+    Class for processing and analyzing Tweets
 '''
 class TwitAnalyzer:
-    def __init__(self):
+    def __init__(self, config_path=None):
         self.config = None
-        self.api = self.init_twitter()
+        self.api = self.init_twitter(config_path=config_path)
         self.trend_locations = self.get_trend_locations()
 
     # Calculate sample size to ensure accuracy
@@ -22,10 +22,13 @@ class TwitAnalyzer:
         return round(numerator/denominator,2)
 
     # Initialize configuration and twitter API connection
-    def init_twitter(self):
-        if not os.path.isfile('.config'):
-            print("[ ERROR ]: Could not find '.config' file in the current directory")
-        with open('.config') as file:
+    def init_twitter(self, config_path):
+        if config_path == None:
+            config_path = '.config'
+
+        if not os.path.isfile(config_path):
+            print(f"[ ERROR ]: Could not find '{config_path}' file")
+        with open(config_path) as file:
             self.config = yaml.load(file, Loader=yaml.FullLoader)
             
         # Initialize twitter connection
