@@ -1,5 +1,5 @@
-# from . import TwitAnalyzer
-# from . import TwitStream
+from . import TwitAnalyzer
+from . import TwitStream
 from time import sleep
 from progress.spinner import *
 from prettytable import *
