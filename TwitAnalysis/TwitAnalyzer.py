@@ -77,10 +77,6 @@ class TwitAnalyzer:
     # Get number of times this tweet has been retweeted
     def retweet_count(self, tweet):
         return tweet.retweet_count
-
-    # Get tweet source url if it exists
-    def tweet_url(self, tweet):
-        return f"https://twitter.com/twitter/statuses/{tweet.id}"
     
     # Get location of tweets author if it exists
     def tweet_location(self, tweet):
