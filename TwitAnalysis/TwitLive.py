@@ -1,40 +1,90 @@
-from . import TwitAnalyzer
-from . import TwitStream
+# from . import TwitAnalyzer
+# from . import TwitStream
 from time import sleep
 from progress.spinner import *
 from prettytable import *
 from termcolor import cprint, colored
 
-'''
+"""
 Module for processing live twitter data
-'''
+"""
+
 class TwitLive:
+
     def __init__(self, analyzer=None):
+        """
+        Class used for analyzing live Twitter data
+
+        Parameters
+        -------
+        analyzer : TwitAnalyzer
+            Analyzer used for making calls to Twitter api
+
+            If an analyzer is not provided, a new one will be created
+
+        """
         if analyzer == None:
             self.analyzer = TwitAnalyzer()
         else:
             self.analyzer = analyzer
-
-    # Create and start a Twitter stream
+            
+    
     def stream(self, query, live):
+        """ Create and start a live Tweet stream 
+
+        Parameters
+        ----------
+        string : query
+            Start stream based on the given string
+        boolean : live
+            Indicate whether or not live data is printed to the terminal
+
+        Returns
+        -------
+        tuple: (stream, thread)
+            Returns TwitStream object and Thread object
+
+        Note
+        ----
+        Do not include the `self` parameter in the ``Parameters`` section.
+        """
+            
         twit_stream = TwitStream(self.analyzer.config['CONSUMER_KEY'],self.analyzer.config['CONSUMER_SECRET'],self.analyzer.config['ACCESS_TOKEN'],self.analyzer.config['ACCESS_TOKEN_SECRET'], live=live)
+        
         thread = twit_stream.filter(track=[query], stall_warnings=True, threaded=True)
         return twit_stream, thread
 
     # Display progress spinner for certain amount of seconds
     def progress(self, text, secs):
+        """ Display progress bar in terminal
+
+        Parameters
+        ----------
+        string : text
+            text to display 
+        int : secs
+            number of seconds to use *NOTE* : function multiplies provided seconds by 4
+        """
         spin = PixelSpinner(text)
         for i in range(secs*4):
             spin.next()
             sleep(.25)
         spin.finish()
 
-    # Process live twitter trend data
-    # 
-    # location (str) - location for which to analyze trends from
-    # num_trends (int) - number of trends to analyze
-    # display (bool) - boolean to indicate whether or not to display live stream output to the console
+    
     def TrendAnalysis(self, location, num_trends, display):
+        """ Process live twitter trend data
+
+        Parameters
+        ----------
+        string : location
+            location for which to analyze trends from
+        int : num_trends
+            number of trends to analyze
+        boolean : display 
+            boolean to indicate whether or not to display live stream output to the console
+        """
+
         trends = self.analyzer.get_trends(self.analyzer.trend_locations[location]["woeid"])
         data={}
         total_tweets = 0
@@ -97,4 +147,10 @@ class TwitLive:
 
     # Process live twitter search data
     def SearchAnalysis(self):
+        """ Analyze live data based on search
+
+        TODO
+        ----
+
+        """
         pass
