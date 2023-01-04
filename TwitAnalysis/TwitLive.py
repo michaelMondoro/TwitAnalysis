@@ -27,9 +27,11 @@ class TwitLive:
             self.analyzer = TwitAnalyzer(config_path=config_path)
         else:
             self.analyzer = analyzer
-            
+
+        self.search_stream = None
+        self.trend_streams = []
     
-    def stream(self, query, live):
+    def stream(self, query, volume, live):
         """ Create and start a live Tweet stream 
 
         Parameters
@@ -49,7 +51,7 @@ class TwitLive:
         Do not include the `self` parameter in the ``Parameters`` section.
         """
             
-        twit_stream = TwitStream(self.analyzer.config['CONSUMER_KEY'],self.analyzer.config['CONSUMER_SECRET'],self.analyzer.config['ACCESS_TOKEN'],self.analyzer.config['ACCESS_TOKEN_SECRET'], live=live)
+        twit_stream = TwitStream(self.analyzer.config['CONSUMER_KEY'],self.analyzer.config['CONSUMER_SECRET'],self.analyzer.config['ACCESS_TOKEN'],self.analyzer.config['ACCESS_TOKEN_SECRET'], query, volume, live=live)
         
         thread = twit_stream.filter(track=[query], stall_warnings=True, threaded=True)
         return twit_stream, thread
@@ -71,7 +73,32 @@ class TwitLive:
             sleep(.25)
         spin.finish()
 
-    
+    # Process live twitter search data
+    def SearchAnalysis(self, query, display):
+        """ Process live twitter search data
+
+        Parameters
+        ----------
+        string : query
+            search query to stream live data
+        boolean : display 
+            boolean to indicate whether or not to display live stream output to the console
+        """
+
+        # Start stream and print status
+        streem, thread = self.stream(query, None, display)
+        if not display:
+            self.progress(f" Streaming search results for [ {colored(query,'magenta')} ] ", 30)
+        else:
+            print(f" [ {query} ] ")
+            sleep(30)
+
+        # Disconnect stream and wait for thread to finish
+        streem.disconnect()
+        thread.join()
+
+        self.search_stream = streem
+
     def TrendAnalysis(self, location, num_trends, display):
         """ Process live twitter trend data
 
@@ -87,11 +114,7 @@ class TwitLive:
 
         trends = self.analyzer.get_trends(self.analyzer.trend_locations[location]["woeid"])
         data={}
-        total_tweets = 0
-        total_reg_tweets = 0
-        total_retweets = 0
-        total_unique_retweets = 0
-        total_volume = 0
+        self.trend_location = location
 
         if num_trends == 'all':
             num_trends = len(trends)
@@ -99,7 +122,7 @@ class TwitLive:
         print(f"Gathering data on top {num_trends} trends from [ {location} ]")
         for i, trend in enumerate(trends[:num_trends]):
             # Start stream and print status
-            streem, thread = self.stream(trend['name'], display)
+            streem, thread = self.stream(trend['name'], trend['tweet_volume'], display)
             if not display:
                 self.progress(f" {i+1}/{num_trends} [ {colored(trend['name'],'magenta')} ] - Volume: {trend['tweet_volume']:,} ", 30)
             else:
@@ -111,20 +134,29 @@ class TwitLive:
             streem.disconnect()
             thread.join()
 
-            total_tweets += streem.tweets
-            total_reg_tweets += streem.reg_tweets
-            total_retweets += streem.retweets
-            total_unique_retweets += streem.get_unique_retweets()
-            total_volume += trend['tweet_volume']
-            
-            data[trend['name']] = { 'tweets':streem.tweets,
-                                    'reg_tweets':streem.reg_tweets,
-                                    'retweets':streem.retweets, 
-                                    'unique_retweets':streem.get_unique_retweets(),
-                                    'perc_retweets':streem.get_perc_retweets(),
-                                    'perc_unique_retweets':streem.get_perc_unique_retweets(),
-                                    'sentiment':( round(streem.pos/streem.tweets*100,2), round(streem.neg/streem.tweets*100,2) ),
-                                    'tw_p_min': streem.tweets*2}
+            self.trend_streams.append(streem)
+
+        
+
+
+    def search_summary(self):
+        # Create results table
+        table = PrettyTable(['Search', 'Total Tweets', 'Sentiment % (+/-)', 'Regular Tweets', 'Retweets', 'Unique Retweets', 'twt/min', '% Retweets', '% Unique Retweets'])
+        table.set_style(SINGLE_BORDER)
+        table.align = 'l'
+
+        sentiment = ( round(self.search_stream.pos/self.search_stream.tweets*100,2), round(self.search_stream.neg/self.search_stream.tweets*100,2) )
+        table.add_row([self.search_stream.name, self.search_stream.tweets, sentiment, self.search_stream.reg_tweets, self.search_stream.retweets, self.search_stream.get_unique_retweets(), self.search_stream.tweets*2, self.search_stream.get_perc_retweets(), self.search_stream.get_perc_unique_retweets()])
+        
+        print(f"Summary for search [ {colored(self.search_stream.name,'magenta')} ]")
+        print(table)
+
+    def trends_summary(self):
+        total_tweets = 0
+        total_reg_tweets = 0
+        total_retweets = 0
+        total_unique_retweets = 0
+        total_volume = 0
 
 
         # Create results table
@@ -132,12 +164,21 @@ class TwitLive:
         table.set_style(SINGLE_BORDER)
         table.align = 'l'
 
-        for trend in data:
-            table.add_row([trend, data[trend]['tweets'], data[trend]['sentiment'], data[trend]['reg_tweets'], data[trend]['retweets'], data[trend]['unique_retweets'], data[trend]['tw_p_min'], data[trend]['perc_retweets'], data[trend]['perc_unique_retweets']])
-        table.add_row(['Summary', total_tweets, '', total_reg_tweets, total_retweets, total_unique_retweets, round(total_tweets/(num_trends/2)), round((total_retweets/total_tweets)*100,2), round((total_unique_retweets/total_retweets)* 100,2)])    
+        for trend in self.trend_streams:
+            total_tweets += trend.tweets
+            total_reg_tweets += trend.reg_tweets
+            total_retweets += trend.retweets
+            total_unique_retweets += trend.get_unique_retweets()
+            total_volume += trend.volume
+
+            sentiment = ( round(trend.pos/trend.tweets*100,2), round(trend.neg/trend.tweets*100,2) )
+            table.add_row([trend.name, trend.tweets, sentiment, trend.reg_tweets, trend.retweets, trend.get_unique_retweets(), trend.tweets*2, trend.get_perc_retweets(), trend.get_perc_unique_retweets()])
+
+
+        table.add_row(['Summary', total_tweets, '', total_reg_tweets, total_retweets, total_unique_retweets, round(total_tweets/(len(self.trend_streams)/2)), round((total_retweets/total_tweets)*100,2), round((total_unique_retweets/total_retweets)* 100,2)])    
 
         print("\n")
-        print(f"Summary of top {num_trends} trends from [ {colored(location,'magenta')} ]")
+        print(f"Summary of top {len(self.trend_streams)} trends from [ {colored(self.trend_location,'magenta')} ]")
         print(table)
         print(f"\nProcessed {round((total_tweets/total_volume)*100,4)}% of total volume - [ {total_tweets:,} tweets ]")
         print(f"[{total_reg_tweets} regular ] [ {total_retweets} retweets ] [ {total_unique_retweets} unique retweets ]")
@@ -145,12 +186,3 @@ class TwitLive:
 
 
 
-    # Process live twitter search data
-    def SearchAnalysis(self):
-        """ Analyze live data based on search
-
-        TODO
-        ----
-
-        """
-        pass

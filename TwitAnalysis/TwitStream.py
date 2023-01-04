@@ -8,8 +8,10 @@ from textblob import TextBlob
 # live=True -> streamed tweets will be printed to the console
 '''
 class TwitStream(tweepy.Stream):
-    def __init__(self, consumer_key, consumer_secret, acces_token, access_token_secret, live=True):
+    def __init__(self, consumer_key, consumer_secret, acces_token, access_token_secret, name, volume, live=True):
         super().__init__(consumer_key, consumer_secret, acces_token, access_token_secret)
+        self.name = name
+        self.volume = volume 
         self.tweets = 0
         self.reg_tweets = 0
         self.retweets = 0
@@ -32,11 +34,11 @@ class TwitStream(tweepy.Stream):
     def get_unique_retweets(self):
         return len(self.unique_retweets)
 
-    # Gets the sum of followers of the tweet's author as well as any users who retweeted
+    # Gets the sum of followers of the tweet's author
     def get_impact_raw(self, tweet):
         followers = tweet.author.followers_count
-        for retweet in tweet.retweets():
-            followers += retweet.author.followers_count
+        # for retweet in tweet.retweets():
+        #     followers += retweet.author.followers_count
 
         self.impact_raw += followers
 
