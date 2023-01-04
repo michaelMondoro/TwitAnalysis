@@ -73,7 +73,7 @@ class TwitLive:
             spin.next()
             sleep(.25)
         spin.finish()
-    
+
     def SearchAnalysis(self, query, display):
         """ Process live twitter search data
 
@@ -88,14 +88,13 @@ class TwitLive:
         print(f"Starting stream based on search : [ {colored(query,'magenta')} ]")
         # Start stream and print status
         stream, thread = self.stream(query, None, display)
-        return stream, thread
 
         self.search_stream = stream
         return stream
 
 
     def TopTrendAnalysis(self, location, num_trends, display):
-        """ Generate summary of top trends on Twitter
+        """ Process top trends on Twitter
 
         Parameters
         ----------
@@ -134,19 +133,30 @@ class TwitLive:
         
 
 
-    def search_summary(self):
+    def search_summary(self, search_stream=None):
+        """ Generate summary of search analysis
+
+        """
+
+        if search_stream == None:
+            search_stream = self.search_stream
+
         # Create results table
         table = PrettyTable(['Search', 'Total Tweets', 'Sentiment % (+/-)', 'Regular Tweets', 'Retweets', 'Unique Retweets', 'twt/min', '% Retweets', '% Unique Retweets'])
         table.set_style(SINGLE_BORDER)
         table.align = 'l'
 
-        sentiment = ( round(self.search_stream.pos/self.search_stream.tweets*100,2), round(self.search_stream.neg/self.search_stream.tweets*100,2) )
-        table.add_row([self.search_stream.name, self.search_stream.tweets, sentiment, self.search_stream.reg_tweets, self.search_stream.retweets, self.search_stream.get_unique_retweets(), self.search_stream.tweets*2, self.search_stream.get_perc_retweets(), self.search_stream.get_perc_unique_retweets()])
+        sentiment = ( round(search_stream.pos/search_stream.tweets*100,2), round(search_stream.neg/search_stream.tweets*100,2) )
+        table.add_row([search_stream.name, search_stream.tweets, sentiment, search_stream.reg_tweets, search_stream.retweets, search_stream.get_unique_retweets(), search_stream.tweets*2, search_stream.get_perc_retweets(), search_stream.get_perc_unique_retweets()])
         
-        print(f"Summary for search [ {colored(self.search_stream.name,'magenta')} ]")
+        print(f"Summary for search [ {colored(search_stream.name,'magenta')} ]")
         print(table)
 
     def trends_summary(self):
+        """ Generate summary of top trend analysis
+
+        """
+
         total_tweets = 0
         total_reg_tweets = 0
         total_retweets = 0
