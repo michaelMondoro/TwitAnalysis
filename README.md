@@ -32,7 +32,7 @@ live.search_summary(stream)
 
 ```
 
-![tweets](https://user-images.githubusercontent.com/38412172/197245058-916f99d9-5c0d-437d-80e3-158a8e3af039.png)
+![tweets](https://user-images.githubusercontent.com/38412172/210646662-c83fcbfc-68e6-422e-a47e-a81fa1227d3a.png)
 
 
 **TODO**:
