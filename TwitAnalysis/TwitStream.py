@@ -35,14 +35,14 @@ class TwitStream(tweepy.Stream):
         return len(self.unique_retweets)
 
     # Gets the sum of followers of the tweet's author
-    def get_impact_raw(self, tweet):
+    def _get_impact_raw(self, tweet):
         followers = tweet.author.followers_count
         # for retweet in tweet.retweets():
         #     followers += retweet.author.followers_count
 
         self.impact_raw += followers
 
-    def print_tweet(self, tweet, text, quoted_text, url, quote_url):
+    def _print_tweet(self, tweet, text, quoted_text, url, quote_url):
         # Print header for tweet or retweet
         if hasattr(tweet, 'retweeted_status'):
             print(f"{colored(tweet.author.name,'cyan')} retweeted {colored(tweet.retweeted_status.author.name,'yellow')}")
@@ -67,11 +67,11 @@ class TwitStream(tweepy.Stream):
         print("---\n\n")
 
     # Get the url associated with the given tweet
-    def get_url(self, tweet):
+    def _get_url(self, tweet):
         return f"https://twitter.com/twitter/statuses/{tweet.id}"
 
     # Get text associated with the given tweet
-    def get_text(self, status):
+    def _get_text(self, status):
         if hasattr(status, 'full_text'):
             return status.full_text
         else:
@@ -79,8 +79,8 @@ class TwitStream(tweepy.Stream):
             
     # Get sentiment of tweet
     # TODO: update to account for varying levels of polarity
-    def get_sentiment(self, tweet):
-        blob = TextBlob(self.get_text(tweet))
+    def _get_sentiment(self, tweet):
+        blob = TextBlob(self._get_text(tweet))
         if blob.polarity > 0:
             self.pos += 1
         else:
@@ -95,13 +95,13 @@ class TwitStream(tweepy.Stream):
         quoted_text = ""
         quote_url = ""
 
-        self.get_sentiment(status)
-        self.get_impact_raw(status)
+        self._get_sentiment(status)
+        self._get_impact_raw(status)
         
         # Get text from retweet
         if hasattr(status, 'retweeted_status'):
-            retweet_url = self.get_url(status.retweeted_status)
-            retweet_text = self.get_text(status.retweeted_status)
+            retweet_url = self._get_url(status.retweeted_status)
+            retweet_text = self._get_text(status.retweeted_status)
             if status.retweeted_status.id not in self.unique_retweets:
                 self.unique_retweets.append(status.retweeted_status.id)
 
@@ -110,17 +110,17 @@ class TwitStream(tweepy.Stream):
             self.reg_tweets += 1
         # Get text from quoted tweet
         if hasattr(status, 'quoted_status'):
-            quote_url = self.get_url(status.quoted_status)
-            quoted_text = self.get_text(status.quoted_status)
+            quote_url = self._get_url(status.quoted_status)
+            quoted_text = self._get_text(status.quoted_status)
 
         # Get text from tweet
-        url = self.get_url(status)
-        text = self.get_text(status)
+        url = self._get_url(status)
+        text = self._get_text(status)
 
         if self.is_live:
             if hasattr(status, 'retweeted_status'):
-                self.print_tweet(status, retweet_text, quoted_text, retweet_url, quote_url)
+                self._print_tweet(status, retweet_text, quoted_text, retweet_url, quote_url)
             else:
-                self.print_tweet(status, text, quoted_text, url, quote_url)
+                self._print_tweet(status, text, quoted_text, url, quote_url)
 
         self.tweets += 1
