@@ -28,7 +28,9 @@ class TwitLive:
         else:
             self.analyzer = analyzer
 
+        # Latest search stream
         self.search_stream = None
+        # List of latest trends processed
         self.trend_streams = []
     
     def stream(self, query, volume, live):
@@ -59,7 +61,6 @@ class TwitLive:
     # Display progress spinner for certain amount of seconds
     def progress(self, text, secs):
         """ Display progress bar in terminal
-
         Parameters
         ----------
         string : text
@@ -72,8 +73,7 @@ class TwitLive:
             spin.next()
             sleep(.25)
         spin.finish()
-
-    # Process live twitter search data
+    
     def SearchAnalysis(self, query, display):
         """ Process live twitter search data
 
@@ -85,22 +85,17 @@ class TwitLive:
             boolean to indicate whether or not to display live stream output to the console
         """
 
+        print(f"Starting stream based on search : [ {colored(query,'magenta')} ]")
         # Start stream and print status
-        streem, thread = self.stream(query, None, display)
-        if not display:
-            self.progress(f" Streaming search results for [ {colored(query,'magenta')} ] ", 30)
-        else:
-            print(f" [ {query} ] ")
-            sleep(30)
+        stream, thread = self.stream(query, None, display)
+        return stream, thread
 
-        # Disconnect stream and wait for thread to finish
-        streem.disconnect()
-        thread.join()
+        self.search_stream = stream
+        return stream
 
-        self.search_stream = streem
 
-    def TrendAnalysis(self, location, num_trends, display):
-        """ Process live twitter trend data
+    def TopTrendAnalysis(self, location, num_trends, display):
+        """ Generate summary of top trends on Twitter
 
         Parameters
         ----------
