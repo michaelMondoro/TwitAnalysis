@@ -46,7 +46,7 @@ live.search_summary(stream)
 
 -----
 
-**Documentation**
+**Twitter Documentation**
 
 https://developer.twitter.com/en/docs/tutorials/building-high-quality-filters
 
