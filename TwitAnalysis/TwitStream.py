@@ -20,6 +20,8 @@ class TwitStream(tweepy.Stream):
         self.impact_raw = 0
 
     def get_perc_retweets(self):
+        if self.tweets == 0:
+            return 0
         return round((self.retweets/self.tweets)*100,2)
 
     def get_perc_unique_retweets(self):
@@ -92,7 +94,7 @@ class TwitStream(tweepy.Stream):
         quote_url = ""
 
         self.get_sentiment(status)
-        self.get_followers(status)
+        self.get_impact_raw(status)
         
         # Get text from retweet
         if hasattr(status, 'retweeted_status'):
