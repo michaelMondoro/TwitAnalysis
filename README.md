@@ -14,11 +14,21 @@ Currently the project is split into two main modules. The `TwitLive` module is u
 
 
 ```python
-from TwitLive import TwitLive
+from TwitAnalysis import *
+from time import sleep
 
-# Make sure to have your keys/tokens defined in your '.config' file. See example file for details
-live = TwitLive(a)
-live.TrendAnalysis("United States", 3, False)
+live = TwitLive()
+
+# Process and display trend analysis
+live.TopTrendAnalysis("United States",2,False)
+live.trends_summary()
+
+# Stream tweets based on search
+stream = live.SearchAnalysis("healthcare",False)
+sleep(10)
+stream.disconnect()
+
+live.search_summary(stream)
 
 ```
 
@@ -29,10 +39,10 @@ live.TrendAnalysis("United States", 3, False)
   - [x] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
   - [x] Stream Tweet trend data
   - [x] Determine Tweet sentiment
-  - [ ] Calculate *Sentiment* (General sentiment surrounding topic/trend)
+  - [x] Calculate *Sentiment* (General sentiment surrounding topic/trend)
   - [ ] Test/Verify Sentiment model
   - [ ] Stream based on location
-  - [ ] Process search data
+  - [x] Process search data
 
 -----
 
