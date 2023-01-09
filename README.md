@@ -36,7 +36,7 @@ live.search_summary(stream)
 
 
 **TODO**:
-  - [x] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
+  - [ ] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
   - [x] Stream Tweet trend data
   - [x] Determine Tweet sentiment
   - [x] Calculate *Sentiment* (General sentiment surrounding topic/trend)
