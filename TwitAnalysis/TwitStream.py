@@ -21,6 +21,12 @@ class TwitStream(tweepy.Stream):
         self.neg = 0
         self.impact_raw = 0
 
+    # Return tuple (%pos, %neg)
+    def get_sentiment(self):
+        if self.tweets > 0:
+            return ( round(self.pos/self.tweets*100,2), round(self.neg/self.tweets*100,2) )
+        else:
+            return (0,0)
     def get_perc_retweets(self):
         if self.tweets == 0:
             return 0
@@ -79,7 +85,7 @@ class TwitStream(tweepy.Stream):
             
     # Get sentiment of tweet
     # TODO: update to account for varying levels of polarity
-    def _get_sentiment(self, tweet):
+    def _calc_sentiment(self, tweet):
         blob = TextBlob(self._get_text(tweet))
         if blob.polarity > 0:
             self.pos += 1
@@ -95,7 +101,7 @@ class TwitStream(tweepy.Stream):
         quoted_text = ""
         quote_url = ""
 
-        self._get_sentiment(status)
+        self._calc_sentiment(status)
         self._get_impact_raw(status)
         
         # Get text from retweet

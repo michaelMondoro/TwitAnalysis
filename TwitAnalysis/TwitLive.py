@@ -146,7 +146,7 @@ class TwitLive:
         table.set_style(SINGLE_BORDER)
         table.align = 'l'
 
-        sentiment = ( round(search_stream.pos/search_stream.tweets*100,2), round(search_stream.neg/search_stream.tweets*100,2) )
+        sentiment = search_stream.get_sentiment()
         table.add_row([search_stream.name, search_stream.tweets, sentiment, search_stream.reg_tweets, search_stream.retweets, search_stream.get_unique_retweets(), search_stream.tweets*2, search_stream.get_perc_retweets(), search_stream.get_perc_unique_retweets()])
         
         print(f"Summary for search [ {colored(search_stream.name,'magenta')} ]")
@@ -176,7 +176,7 @@ class TwitLive:
             total_unique_retweets += trend.get_unique_retweets()
             total_volume += trend.volume
 
-            sentiment = ( round(trend.pos/trend.tweets*100,2), round(trend.neg/trend.tweets*100,2) )
+            sentiment = trend.get_sentiment()
             table.add_row([trend.name, trend.tweets, sentiment, trend.reg_tweets, trend.retweets, trend.get_unique_retweets(), trend.tweets*2, trend.get_perc_retweets(), trend.get_perc_unique_retweets()])
 
 
