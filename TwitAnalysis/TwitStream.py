@@ -72,8 +72,8 @@ class TwitStream(tweepy.Stream):
 
     # Get text associated with the given tweet
     def _get_text(self, status):
-        if hasattr(status, 'full_text'):
-            return status.full_text
+        if hasattr(status, 'extended_tweet'):
+            return status.extended_tweet['full_text']
         else:
             return status.text
             
