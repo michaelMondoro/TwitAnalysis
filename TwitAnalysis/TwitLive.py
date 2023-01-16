@@ -93,7 +93,7 @@ class TwitLive:
         return stream
 
 
-    def TopTrendAnalysis(self, location, num_trends, display):
+    def TopTrendAnalysis(self, location, num_trends, display, time):
         """ Process top trends on Twitter
 
         Parameters
@@ -104,6 +104,9 @@ class TwitLive:
             number of trends to analyze
         boolean : display 
             boolean to indicate whether or not to display live stream output to the console
+        int : time 
+            time (in seconds) to spend gathering live data for each trend
+
         """
 
         trends = self.analyzer.get_trends(self.analyzer.trend_locations[location]["woeid"])
@@ -118,10 +121,10 @@ class TwitLive:
             # Start stream and print status
             streem, thread = self.stream(trend['name'], trend['tweet_volume'], display)
             if not display:
-                self.progress(f" {i+1}/{num_trends} [ {colored(trend['name'],'magenta')} ] - Volume: {trend['tweet_volume']:,} ", 30)
+                self.progress(f" {i+1}/{num_trends} [ {colored(trend['name'],'magenta')} ] - Volume: {trend['tweet_volume']:,} ", time)
             else:
                 print(f" {i+1}/{num_trends} [ {trend['name']} ] - Volume: {trend['tweet_volume']:,}")
-                sleep(30)
+                sleep(time)
             
 
             # Disconnect stream and wait for thread to finish
@@ -137,9 +140,15 @@ class TwitLive:
         """ Generate summary of search analysis
 
         """
+        if search_stream != None and not isinstance(search_stream, TwitStream):
+            print('Invalid parameter . . .')
+            return 
 
         if search_stream == None:
             search_stream = self.search_stream
+            if self.search_stream == None:
+                print('No search to summarize . . .')
+                return 
 
         # Create results table
         table = PrettyTable(['Search', 'Total Tweets', 'Sentiment % (+/-)', 'Regular Tweets', 'Retweets', 'Unique Retweets', 'twt/min', '% Retweets', '% Unique Retweets'])
@@ -156,6 +165,10 @@ class TwitLive:
         """ Generate summary of top trend analysis
 
         """
+
+        if self.trend_streams == []:
+            print('No trends to summarize . . .')
+            return
 
         total_tweets = 0
         total_reg_tweets = 0
