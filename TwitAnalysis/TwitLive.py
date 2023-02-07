@@ -66,7 +66,7 @@ class TwitLive:
         string : text
             text to display 
         int : secs
-            number of seconds to use *NOTE* : function multiplies provided seconds by 4
+            number of seconds to stream 
         """
         spin = PixelSpinner(text)
         for i in range(secs*4):
