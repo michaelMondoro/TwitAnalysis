@@ -93,11 +93,11 @@ class TwitAnalyzer:
         return f"https://twitter.com/twitter/statuses/{tweet.id}"
 
     # Get text associated with the given tweet
-    def get_text(self, status):
-        if hasattr(status, 'full_text'):
-            return status.full_text
+    def get_text(self, tweet):
+        if hasattr(tweet, 'full_text'):
+            return tweet.full_text
         else:
-            return status.text
+            return tweet.text
 
     # Get sentiment of tweet
     # TODO: update to account for sentiment levels? Tuning of the actual sentiment gathered?
@@ -111,11 +111,10 @@ class TwitAnalyzer:
 
     # Gets the sum of followers of the tweet's author as well as any users who retweeted
     def get_followers(self, tweet):
-        followers = tweet.author.followers_count
-        for retweet in tweet.retweets():
-            followers += retweet.author.followers_count
+        return tweet.author.followers_count
+        # for retweet in tweet.retweets():
+        #     followers += retweet.author.followers_count
 
-        return followers
 
     # Scrape tweets related to specified topic 
     # NOTE: THIS FILTERS RETWEETS
