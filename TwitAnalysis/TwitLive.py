@@ -17,7 +17,7 @@ class TwitLive:
 
         Parameters
         -------
-        analyzer : TwitAnalyzer
+        TwitAnalyzer : analyzer 
             Analyzer used for making calls to Twitter api
 
             If an analyzer is not provided, a new one will be created
@@ -61,6 +61,7 @@ class TwitLive:
     # Display progress spinner for certain amount of seconds
     def progress(self, text, secs):
         """ Display progress bar in terminal
+
         Parameters
         ----------
         string : text

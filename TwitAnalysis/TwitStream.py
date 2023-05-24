@@ -2,11 +2,9 @@ import tweepy
 from termcolor import cprint, colored
 from textblob import TextBlob
 
-'''
-# Custom stream class for streaming live tweet data
-# 
-# live=True -> streamed tweets will be printed to the console
-'''
+"""
+    Custom stream class for streaming live tweet data
+"""
 class TwitStream(tweepy.Stream):
     def __init__(self, consumer_key, consumer_secret, acces_token, access_token_secret, name, volume, live=True):
         super().__init__(consumer_key, consumer_secret, acces_token, access_token_secret)
@@ -21,27 +19,42 @@ class TwitStream(tweepy.Stream):
         self.neg = 0
         self.impact_raw = 0
 
-    # Return tuple (%pos, %neg)
+   
     def get_sentiment(self):
+        """ Get sentiment of the stream
+            
+        Returns
+        -------
+        (float, float) : (%pos, %neg)
+
+        """
         if self.tweets > 0:
             return ( round(self.pos/self.tweets*100,2), round(self.neg/self.tweets*100,2) )
         else:
             return (0,0)
+
     def get_perc_retweets(self):
+        """ Get percent of tweets processed that are retweets
+        """
         if self.tweets == 0:
             return 0
         return round((self.retweets/self.tweets)*100,2)
 
     def get_perc_unique_retweets(self):
+        """ Get the percentage of retweets that are unique
+        """
         if self.retweets == 0:
             return 0
         return round((self.get_unique_retweets()/self.retweets)*100,2)
 
     def get_unique_retweets(self):
+        """ Get the number of unique retweets from the stream
+        """
         return len(self.unique_retweets)
 
-    # Gets the sum of followers of the tweet's author
     def _get_impact_raw(self, tweet):
+        """ Get the sum of followers of the tweet's author
+        """
         followers = tweet.author.followers_count
         # for retweet in tweet.retweets():
         #     followers += retweet.author.followers_count
@@ -49,6 +62,21 @@ class TwitStream(tweepy.Stream):
         self.impact_raw += followers
 
     def _print_tweet(self, tweet, text, quoted_text, url, quote_url):
+        """ Print tweet to the console
+
+        Parameters
+        ----------
+        Status : tweet 
+            Tweet Status object
+        string : text
+            Text from the tweet
+        string : quoted_text
+            quoted text from tweet
+        string : url
+            tweet url
+        string : quote_url
+            url of the quoted tweet
+        """
         # Print header for tweet or retweet
         if hasattr(tweet, 'retweeted_status'):
             print(f"{colored(tweet.author.name,'cyan')} retweeted {colored(tweet.retweeted_status.author.name,'yellow')}")
@@ -72,30 +100,39 @@ class TwitStream(tweepy.Stream):
 
         print("---\n\n")
 
-    # Get the url associated with the given tweet
     def _get_url(self, tweet):
+        """ Get the url associated with the given tweet
+        """
         return f"https://twitter.com/twitter/statuses/{tweet.id}"
 
-    # Get text associated with the given tweet
     def _get_text(self, status):
+        """ Get text associated with the given tweet
+        """
         if hasattr(status, 'extended_tweet'):
             return status.extended_tweet['full_text']
         else:
             return status.text
             
-    # Get sentiment of tweet
-    # TODO: update to account for varying levels of polarity
     def _calc_sentiment(self, tweet):
+        """ Get sentiment of tweet
+
+            TODO: update to account for varying levels of polarity
+        """
         blob = TextBlob(self._get_text(tweet))
         if blob.polarity > 0:
             self.pos += 1
         else:
             self.neg += 1
 
-    def on_closed(self, response):
-        pass
-
     def on_status(self, status):
+        """ Main function that performs processing every time a Tweet status is recieved in the stream
+        
+        Parameters
+        ----------
+        Status : status
+            Tweet status object
+            
+        """
         retweet_text = ""
         retweet_url = ""
         quoted_text = ""
