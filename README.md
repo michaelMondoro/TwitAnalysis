@@ -12,7 +12,7 @@ The scope of the project is limited by a number of different factors which we wi
 ## Functionality
 Currently the project is split into two main modules. The `TwitLive` module is used for streaming/processing live Twitter data. The `TwitProcess` module is used for processing bulk Twitter data.
 
-
+**TwitLive** Example
 ```python
 from TwitAnalysis import *
 from time import sleep
@@ -20,7 +20,7 @@ from time import sleep
 live = TwitLive()
 
 # Process and display trend analysis
-live.TopTrendAnalysis("United States",2,False)
+live.TopTrendAnalysis("United States",2,False, 30)
 live.trends_summary()
 
 # Stream tweets based on search
@@ -34,15 +34,32 @@ live.search_summary(stream)
 
 ![tweets](https://user-images.githubusercontent.com/38412172/210646662-c83fcbfc-68e6-422e-a47e-a81fa1227d3a.png)
 
+**TwitProcess** Example
+```python
+from TwitAnalysis import *
 
-**TODO**:
-  - [ ] Calculate *Impact* (How many people are being reached or impacted by this topic/trend)
-  - [x] Stream Tweet trend data
-  - [x] Determine Tweet sentiment
-  - [x] Calculate *Sentiment* (General sentiment surrounding topic/trend)
-  - [ ] Test/Verify Sentiment model
-  - [ ] Stream based on location
-  - [x] Process search data
+# Initialize new process object with a specific query
+p = TwitProcess("Python Programming")
+# Search/Process Tweets
+p.bulk_analysis(700)
+
+# Display stats for search results
+print("Stats for query: 'Python Programming'")
+print(f"Sentiment: {p.overall_sentiment()}")
+print(f"Retweets: {p.retweets}")
+print(f"Tweets: {p.reg_tweets}")
+print(f"Impact: {p.impact}")
+
+```
+```
+#==== OUTPUT ====#
+Stats for query: 'Python Programming'
+Sentiment: -0.366
+Retweets: 485
+Tweets: 282
+Impact: 6,228,425
+```
+
 
 -----
 
