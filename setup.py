@@ -19,7 +19,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     install_requires=[
-        "tweepy",
+        "tweepy==4.12.1",
         "PyYAML",
         "termcolor",
         "progress",
