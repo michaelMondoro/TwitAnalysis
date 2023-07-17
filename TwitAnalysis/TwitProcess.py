@@ -62,14 +62,14 @@ class TwitProcess:
         self.tweets += list(results)
         self.max_id = results.max_id
 
-        for tweet in self.tweets:
+        for tweet in results:
             if hasattr(tweet, 'retweeted_status'):
                 self.retweets += 1
             else:
                 self.reg_tweets += 1
 
             
-            if self.analyzer.get_sentiment(tweet) > 0:
+            if self.analyzer.get_sentiment(tweet) >= 0:
                 self.pos += 1
             else:
                 self.neg += 1
