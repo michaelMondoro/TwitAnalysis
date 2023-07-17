@@ -45,7 +45,7 @@ class TwitProcess:
         self.max_id = None
 
     
-    def bulk_analysis(self, count):
+    def bulk_analysis(self):
         """ Process bulk twitter data related to specified query
 
 
@@ -58,10 +58,9 @@ class TwitProcess:
         ----
         the max number of tweets processed at once is 100
         """
-        while len(self.tweets) < count:
-            results = self.analyzer.api.search_tweets(self.query,count=min(TwitProcess.MAX_COUNT,count), result_type='recent',tweet_mode='extended', max_id=self.max_id)
-            self.tweets += list(results)
-            self.max_id = results.max_id
+        results = self.analyzer.api.search_tweets(self.query,count=TwitProcess.MAX_COUNT, result_type='recent',tweet_mode='extended', max_id=self.max_id)
+        self.tweets += list(results)
+        self.max_id = results.max_id
 
         for tweet in self.tweets:
             if hasattr(tweet, 'retweeted_status'):
