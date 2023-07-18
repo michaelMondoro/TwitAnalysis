@@ -53,9 +53,10 @@ class TwitLive:
         Do not include the `self` parameter in the ``Parameters`` section.
         """
             
-        twit_stream = TwitStream(self.analyzer.config['CONSUMER_KEY'],self.analyzer.config['CONSUMER_SECRET'],self.analyzer.config['ACCESS_TOKEN'],self.analyzer.config['ACCESS_TOKEN_SECRET'], query, volume, live=live)
-        
-        thread = twit_stream.filter(track=[query], stall_warnings=True, threaded=True)
+        #twit_stream = TwitStream(self.analyzer.config['CONSUMER_KEY'],self.analyzer.config['CONSUMER_SECRET'],self.analyzer.config['ACCESS_TOKEN'],self.analyzer.config['ACCESS_TOKEN_SECRET'], query, volume, live=live)
+        twit_stream = TwitStream(self.analyzer.config["BEARER_TOKEN"], query, volume, live=live)
+        #thread = twit_stream.filter(track=[query], stall_warnings=True, threaded=True)
+        thread = twit_stream.sample(threaded=True)
         return twit_stream, thread
 
     # Display progress spinner for certain amount of seconds

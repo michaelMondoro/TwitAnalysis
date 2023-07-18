@@ -5,9 +5,10 @@ from textblob import TextBlob
 """
     Custom stream class for streaming live tweet data
 """
-class TwitStream(tweepy.Stream):
-    def __init__(self, consumer_key, consumer_secret, acces_token, access_token_secret, name, volume, live=True):
-        super().__init__(consumer_key, consumer_secret, acces_token, access_token_secret)
+class TwitStream(tweepy.StreamingClient):
+    def __init__(self, bearer_token, name, volume, live=True):
+        #super().__init__(consumer_key, consumer_secret, acces_token, access_token_secret)
+        super().__init__(bearer_token)
         self.name = name
         self.volume = volume 
         self.tweets = 0
@@ -124,20 +125,20 @@ class TwitStream(tweepy.Stream):
         else:
             self.neg += 1
 
-    def on_status(self, status):
+    def on_tweet(self, status):
         """ Main function that performs processing every time a Tweet status is recieved in the stream
         
         Parameters
         ----------
         Status : status
             Tweet status object
-            
+
         """
         retweet_text = ""
         retweet_url = ""
         quoted_text = ""
         quote_url = ""
-
+        
         self._calc_sentiment(status)
         self._get_impact_raw(status)
         
