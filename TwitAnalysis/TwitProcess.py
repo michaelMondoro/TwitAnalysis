@@ -58,7 +58,7 @@ class TwitProcess:
         ----
         the max number of tweets processed at once is 100
         """
-        results = self.analyzer.api.search_tweets(self.query,count=TwitProcess.MAX_COUNT, result_type='recent',tweet_mode='extended', max_id=self.max_id)
+        results = self.analyzer.api.search_tweets(f"{self.query} -filter:retweets", count=TwitProcess.MAX_COUNT, result_type='recent',tweet_mode='extended', max_id=self.max_id)
         self.tweets += list(results)
         self.max_id = results.max_id
 
