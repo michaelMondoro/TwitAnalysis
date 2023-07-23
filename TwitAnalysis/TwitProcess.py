@@ -7,7 +7,7 @@ Module for processing twitter data offline
 '''
 class TwitProcess:
     MAX_COUNT = 100
-    def __init__(self, query, config_path=None):
+    def __init__(self, query, config_path=None, max_id=None):
         """
         Class used for processing Twitter search data
 
@@ -22,7 +22,10 @@ class TwitProcess:
         self.analyzer = TwitAnalyzer(config_path=config_path)
         self._reset()
         self.query = query
-        self.max_id = None
+        self.max_id = max_id
+
+    def tweet_count(self):
+        return len(self.tweets)
 
     def set_query(self, query, reset=True):
         """ Set a new query string and reset all values
@@ -45,7 +48,7 @@ class TwitProcess:
         self.max_id = None
 
     
-    def bulk_analysis(self):
+    def analyze(self):
         """ Process bulk twitter data related to specified query
 
 
