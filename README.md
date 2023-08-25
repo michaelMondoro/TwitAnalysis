@@ -12,6 +12,7 @@ The scope of the project is limited by a number of different factors which we wi
 ## Functionality
 Currently the project is split into two main modules. The `TwitLive` module is used for streaming/processing live Twitter data. The `TwitProcess` module is used for processing bulk Twitter data.
 
+
 **TwitLive** Example
 ```python
 from TwitAnalysis import *
@@ -41,7 +42,7 @@ from TwitAnalysis import *
 # Initialize new process object with a specific query
 p = TwitProcess("Python Programming")
 # Search/Process Tweets
-p.bulk_analysis(700)
+p.analyze()
 
 # Display stats for search results
 print("Stats for query: 'Python Programming'")
