@@ -1,5 +1,5 @@
 [![Generic badge](https://img.shields.io/badge/Licence-MIT-blue.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/Maintained-yes-green.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/Maintained-no-red.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/Python-3.10.6-yellow.svg)](https://shields.io/)
 [![Generic badge](https://img.shields.io/badge/TwitAnalysis-1.1-red.svg)](https://pypi.org/project/TwitAnalysis/)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/TwitAnalysis)
